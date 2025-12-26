@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: migrationgpt-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - AWS_REGION=${AWS_REGION}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - BEDROCK_MODEL=${BEDROCK_MODEL}
+      - PINECONE_API_KEY=${PINECONE_API_KEY}
+      - PINECONE_ENVIRONMENT=${PINECONE_ENVIRONMENT}
+      - ENVIRONMENT=production
+    volumes:
+      - ./backend:/app
+      - upload-data:/tmp/uploads
+      - report-data:/tmp/reports
+    networks:
+      - migrationgpt-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: migrationgpt-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+    networks:
+      - migrationgpt-network
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: migrationgpt-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - migrationgpt-network
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+volumes:
+  upload-data:
+  report-data:
+  redis-data:
+
+networks:
+  migrationgpt-network:
+    driver: bridge
