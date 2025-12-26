@@ -9,13 +9,17 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - AWS_REGION=${AWS_REGION}
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      - BEDROCK_MODEL=${BEDROCK_MODEL}
-      - PINECONE_API_KEY=${PINECONE_API_KEY}
-      - PINECONE_ENVIRONMENT=${PINECONE_ENVIRONMENT}
-      - ENVIRONMENT=production
+      # DEMO MODE - Works without any credentials!
+      - DEMO_MODE=true
+      - ENVIRONMENT=demo
+      - LOG_LEVEL=INFO
+      
+      # Optional: Add your AWS credentials to use real AI
+      # - DEMO_MODE=false
+      # - AWS_REGION=${AWS_REGION:-us-east-1}
+      # - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      # - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      # - BEDROCK_MODEL=${BEDROCK_MODEL:-anthropic.claude-3-5-sonnet-20241022-v2:0}
     volumes:
       - ./backend:/app
       - upload-data:/tmp/uploads
@@ -28,6 +32,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 40s
 
   frontend:
     build:
