@@ -1,0 +1,118 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Sample CloudFormation template for testing MigrationGPT",
+  "Resources": {
+    "WebServerInstance": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "t3.medium",
+        "ImageId": "ami-0c55b159cbfafe1f0",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "WebServer"
+          },
+          {
+            "Key": "Environment",
+            "Value": "Production"
+          }
+        ]
+      }
+    },
+    "ApplicationBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "my-application-data-bucket",
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": false,
+          "BlockPublicPolicy": false,
+          "IgnorePublicAcls": false,
+          "RestrictPublicBuckets": false
+        },
+        "Tags": [
+          {
+            "Key": "Purpose",
+            "Value": "ApplicationData"
+          }
+        ]
+      }
+    },
+    "DatabaseInstance": {
+      "Type": "AWS::RDS::DBInstance",
+      "Properties": {
+        "DBInstanceIdentifier": "production-database",
+        "Engine": "postgres",
+        "EngineVersion": "14.7",
+        "DBInstanceClass": "db.t3.medium",
+        "AllocatedStorage": "100",
+        "StorageType": "gp2",
+        "StorageEncrypted": false,
+        "PubliclyAccessible": true,
+        "MasterUsername": "admin",
+        "MasterUserPassword": "TempPassword123",
+        "BackupRetentionPeriod": 7,
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "ProductionDB"
+          }
+        ]
+      }
+    },
+    "WebServerSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Security group for web servers",
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 80,
+            "ToPort": 80,
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 443,
+            "ToPort": 443,
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 22,
+            "ToPort": 22,
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "WebServerSG"
+          }
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "WebServerInstanceId": {
+      "Description": "Instance ID of the web server",
+      "Value": {
+        "Ref": "WebServerInstance"
+      }
+    },
+    "BucketName": {
+      "Description": "Name of the S3 bucket",
+      "Value": {
+        "Ref": "ApplicationBucket"
+      }
+    },
+    "DatabaseEndpoint": {
+      "Description": "Endpoint of the database",
+      "Value": {
+        "Fn::GetAtt": [
+          "DatabaseInstance",
+          "Endpoint.Address"
+        ]
+      }
+    }
+  }
+}
