@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MigrationGPT - AI-Powered Cloud Migration Assessment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .logo h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        
+        .logo p {
+            color: #6b7280;
+            font-size: 1.125rem;
+        }
+        
+        .upload-section {
+            margin: 2rem 0;
+        }
+        
+        .upload-zone {
+            border: 3px dashed #d1d5db;
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            background: #f9fafb;
+        }
+        
+        .upload-zone:hover {
+            border-color: #667eea;
+            background: #ede9fe;
+        }
+        
+        .upload-zone.drag-over {
+            border-color: #667eea;
+            background: #ede9fe;
+            transform: scale(1.02);
+        }
+        
+        .upload-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1rem;
+            color: #9ca3af;
+        }
+        
+        .upload-zone h3 {
+            font-size: 1.5rem;
+            color: #111827;
+            margin-bottom: 0.5rem;
+        }
+        
+        .upload-zone p {
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+        }
+        
+        .upload-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .upload-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        input[type="file"] {
+            display: none;
+        }
+        
+        .file-preview {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f3f4f6;
+            border-radius: 12px;
+            display: none;
+        }
+        
+        .file-preview.active {
+            display: block;
+        }
+        
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .file-icon {
+            width: 40px;
+            height: 40px;
+            color: #667eea;
+        }
+        
+        .analyze-button {
+            width: 100%;
+            padding: 1.25rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 2rem;
+            transition: transform 0.2s;
+        }
+        
+        .analyze-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+        }
+        
+        .analyze-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .results {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: #f9fafb;
+            border-radius: 16px;
+            display: none;
+        }
+        
+        .results.active {
+            display: block;
+        }
+        
+        .alert {
+            padding: 1rem;
+            background: #fef3c7;
+            border: 1px solid #fbbf24;
+            border-radius: 8px;
+            color: #92400e;
+            margin-bottom: 1.5rem;
+        }
+        
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .metric {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-label {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        
+        .deployment-links {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #ede9fe;
+            border-radius: 12px;
+        }
+        
+        .deployment-links h3 {
+            color: #111827;
+            margin-bottom: 1rem;
+        }
+        
+        .link-button {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .link-button:hover {
+            background: #667eea;
+            color: white;
+            transform: translateX(4px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <h1>Migration<span>GPT</span></h1>
+            <p>AI-Powered Cloud Migration Assessment</p>
+        </div>
+        
+        <div class="upload-section">
+            <div class="upload-zone" id="uploadZone">
+                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="17 8 12 3 7 8"/>
+                    <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                <h3>Upload Infrastructure File</h3>
+                <p>Drag and drop your Terraform, CloudFormation, or YAML file here</p>
+                <label for="fileInput" class="upload-button">
+                    Browse Files
+                </label>
+                <input type="file" id="fileInput" accept=".tf,.json,.yaml,.yml">
+            </div>
+            
+            <div class="file-preview" id="filePreview">
+                <div class="file-info">
+                    <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+                        <polyline points="13 2 13 9 20 9"/>
+                    </svg>
+                    <div>
+                        <div id="fileName" style="font-weight: 600; color: #111827;"></div>
+                        <div id="fileSize" style="color: #6b7280; font-size: 0.875rem;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <button class="analyze-button" id="analyzeBtn" disabled>
+            Start AI Analysis
+        </button>
+        
+        <div class="alert">
+            <strong>Demo Mode:</strong> This is a frontend-only demo. For full AI-powered analysis with backend processing, use one of the deployment links below.
+        </div>
+        
+        <div class="results" id="results">
+            <h3 style="color: #111827; margin-bottom: 1rem;">Analysis Results (Demo)</h3>
+            <div class="metrics">
+                <div class="metric">
+                    <div class="metric-value">75</div>
+                    <div class="metric-label">Risk Score</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">12</div>
+                    <div class="metric-label">Findings</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">$340K</div>
+                    <div class="metric-label">Est. Cost</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">20</div>
+                    <div class="metric-label">Weeks</div>
+                </div>
+            </div>
+            <p style="margin-top: 1.5rem; color: #6b7280;">
+                For detailed analysis with real AI processing, deploy to Render or Railway using the links below.
+            </p>
+        </div>
+        
+        <div class="deployment-links">
+            <h3>Deploy Your Own Instance</h3>
+            <a href="https://render.com/deploy?repo=https://github.com/bharathk2498/migrationgpt" class="link-button" target="_blank">
+                Deploy to Render (Full Stack)
+            </a>
+            <a href="https://railway.app/template/migrationgpt" class="link-button" target="_blank">
+                Deploy to Railway (Full Stack)
+            </a>
+            <a href="https://vercel.com/new/clone?repository-url=https://github.com/bharathk2498/migrationgpt" class="link-button" target="_blank">
+                Deploy to Vercel (Frontend)
+            </a>
+            <a href="https://github.com/bharathk2498/migrationgpt" class="link-button" target="_blank">
+                View on GitHub
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+        const filePreview = document.getElementById('filePreview');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const results = document.getElementById('results');
+        
+        let selectedFile = null;
+        
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('drag-over');
+        });
+        
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('drag-over');
+        });
+        
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('drag-over');
+            const file = e.dataTransfer.files[0];
+            handleFile(file);
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            handleFile(file);
+        });
+        
+        function handleFile(file) {
+            if (!file) return;
+            
+            selectedFile = file;
+            fileName.textContent = file.name;
+            fileSize.textContent = (file.size / 1024).toFixed(1) + ' KB';
+            filePreview.classList.add('active');
+            analyzeBtn.disabled = false;
+        }
+        
+        analyzeBtn.addEventListener('click', () => {
+            results.classList.add('active');
+            analyzeBtn.textContent = 'Analysis Complete!';
+            analyzeBtn.disabled = true;
+            
+            setTimeout(() => {
+                analyzeBtn.textContent = 'Start AI Analysis';
+                analyzeBtn.disabled = false;
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
