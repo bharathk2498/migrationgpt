@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException, BackgroundTasks
+from fastapi import FastAPI, File, UploadFile, HTTPException, BackgroundTasks, Body
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, FileResponse
 from pydantic import BaseModel
@@ -7,6 +7,7 @@ import os
 import uuid
 from datetime import datetime
 import logging
+import tempfile
 
 from agents.security_agent import SecurityAgent
 from agents.cost_agent import CostAgent
@@ -24,7 +25,7 @@ logger = logging.getLogger(__name__)
 app = FastAPI(
     title="MigrationGPT API",
     description="AI-Powered Cloud Migration Assessment Platform",
-    version="1.0.0"
+    version="2.0.0"
 )
 
 app.add_middleware(
@@ -34,6 +35,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+class GitHubAnalysisRequest(BaseModel):
+    github_url: Optional[str] = None
+    project_name: str
+    file_content: str
+    target_cloud: str = "aws"
 
 class AnalysisRequest(BaseModel):
     project_name: str
@@ -52,8 +59,9 @@ class AnalysisResponse(BaseModel):
 async def root():
     return {
         "service": "MigrationGPT",
-        "version": "1.0.0",
-        "status": "operational"
+        "version": "2.0.0",
+        "status": "operational",
+        "features": ["GitHub Integration", "AI Analysis", "Enterprise UI"]
     }
 
 @app.get("/health")
@@ -66,20 +74,30 @@ async def health_check():
 @app.post("/api/analyze", response_model=AnalysisResponse)
 async def analyze_infrastructure(
     background_tasks: BackgroundTasks,
-    file: UploadFile = File(...),
-    project_name: str = "migration-project",
+    request: GitHubAnalysisRequest = None,
+    file: UploadFile = File(None),
+    project_name: str = None,
     target_cloud: str = "aws"
 ):
     try:
         analysis_id = str(uuid.uuid4())
         
-        upload_dir = "/tmp/uploads"
-        os.makedirs(upload_dir, exist_ok=True)
-        file_path = os.path.join(upload_dir, f"{analysis_id}_{file.filename}")
-        
-        with open(file_path, "wb") as f:
-            content = await file.read()
-            f.write(content)
+        if request and request.file_content:
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.tf', delete=False) as tmp_file:
+                tmp_file.write(request.file_content)
+                file_path = tmp_file.name
+            project_name = request.project_name
+            target_cloud = request.target_cloud
+        elif file:
+            upload_dir = "/tmp/uploads"
+            os.makedirs(upload_dir, exist_ok=True)
+            file_path = os.path.join(upload_dir, f"{analysis_id}_{file.filename}")
+            
+            with open(file_path, "wb") as f:
+                content = await file.read()
+                f.write(content)
+        else:
+            raise HTTPException(status_code=400, detail="No file provided")
         
         logger.info(f"Starting analysis {analysis_id} for {project_name}")
         
@@ -105,6 +123,12 @@ async def analyze_infrastructure(
             cost_estimate,
             arch_recommendations
         )
+        
+        if request:
+            try:
+                os.unlink(file_path)
+            except:
+                pass
         
         response = AnalysisResponse(
             analysis_id=analysis_id,
