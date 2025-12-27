@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: migrationgpt-backend
+    env: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    envVars:
+      - key: DEMO_MODE
+        value: true
+      - key: PORT
+        value: 8000
+    healthCheckPath: /health
+    
+  - type: web
+    name: migrationgpt-frontend
+    env: docker
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    envVars:
+      - key: REACT_APP_API_URL
+        fromService:
+          name: migrationgpt-backend
+          type: web
+          property: host
+      - key: PORT
+        value: 3000
