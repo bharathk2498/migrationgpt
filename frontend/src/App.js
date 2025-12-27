@@ -1,45 +1,47 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './App.css';
+import GitHubFileBrowser from './components/GitHubFileBrowser';
+import ResultsDashboard from './components/ResultsDashboard';
+import LoadingScreen from './components/LoadingScreen';
 
 function App() {
-  const [file, setFile] = useState(null);
   const [projectName, setProjectName] = useState('');
+  const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('upload');
 
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+  const handleFileSelect = (file) => {
+    setSelectedFile(file);
     setError(null);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!file) {
-      setError('Please select a file');
+  const handleAnalyze = async () => {
+    if (!selectedFile) {
+      setError('Please select a file from GitHub');
       return;
     }
 
     setLoading(true);
     setError(null);
 
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('project_name', projectName || 'migration-project');
-    formData.append('target_cloud', 'aws');
-
     try {
-      const response = await axios.post(`${API_URL}/api/analyze`, formData, {
+      const response = await axios.post(`${API_URL}/api/analyze`, {
+        github_url: selectedFile.download_url,
+        project_name: projectName || selectedFile.name,
+        file_content: selectedFile.content
+      }, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
         },
       });
 
       setResults(response.data);
+      setActiveTab('results');
     } catch (err) {
       setError(err.response?.data?.detail || 'Analysis failed. Please try again.');
     } finally {
@@ -48,116 +50,134 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">
-            Migration<span className="text-blue-600">GPT</span>
-          </h1>
-          <p className="text-xl text-gray-600">
-            AI-Powered Cloud Migration Assessment
-          </p>
-        </div>
-
-        {/* Upload Form */}
-        <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-xl p-8 mb-8">
-          <form onSubmit={handleSubmit}>
-            <div className="mb-6">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Project Name
-              </label>
-              <input
-                type="text"
-                value={projectName}
-                onChange={(e) => setProjectName(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter project name"
-              />
+    <div className="app-container">
+      {/* Header */}
+      <header className="app-header">
+        <div className="header-content">
+          <div className="logo-section">
+            <div className="logo-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z" fill="currentColor"/>
+              </svg>
             </div>
-
-            <div className="mb-6">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Infrastructure File
-              </label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition-colors">
-                <input
-                  type="file"
-                  onChange={handleFileChange}
-                  accept=".tf,.json,.yaml,.yml"
-                  className="hidden"
-                  id="file-upload"
-                />
-                <label htmlFor="file-upload" className="cursor-pointer">
-                  <div className="text-gray-600">
-                    {file ? (
-                      <span className="text-blue-600 font-medium">{file.name}</span>
-                    ) : (
-                      <span>Click to upload or drag and drop</span>
-                    )}
-                  </div>
-                  <div className="text-sm text-gray-500 mt-2">
-                    Terraform, CloudFormation, or YAML files
-                  </div>
-                </label>
-              </div>
-            </div>
-
-            {error && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-red-700">{error}</p>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading || !file}
-              className="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-            >
-              {loading ? 'Analyzing...' : 'Analyze Infrastructure'}
-            </button>
-          </form>
-        </div>
-
-        {/* Results */}
-        {results && (
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-lg shadow-xl p-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Analysis Results</h2>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div className="bg-blue-50 rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-gray-700 mb-2">Risk Score</h3>
-                  <p className="text-4xl font-bold text-blue-600">{results.risk_score}/100</p>
-                </div>
-                
-                <div className="bg-green-50 rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-gray-700 mb-2">Findings</h3>
-                  <p className="text-4xl font-bold text-green-600">{results.findings_count}</p>
-                </div>
-                
-                <div className="bg-purple-50 rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-gray-700 mb-2">Estimated Cost</h3>
-                  <p className="text-4xl font-bold text-purple-600">${results.estimated_cost.toLocaleString()}</p>
-                </div>
-                
-                <div className="bg-orange-50 rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-gray-700 mb-2">Timeline</h3>
-                  <p className="text-4xl font-bold text-orange-600">{results.timeline_weeks} weeks</p>
-                </div>
-              </div>
-
-              <div className="bg-gray-50 rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-gray-700 mb-4">Analysis ID</h3>
-                <code className="text-sm text-gray-600">{results.analysis_id}</code>
-                <p className="text-sm text-gray-500 mt-4">
-                  Use this ID to download detailed reports and proposals.
-                </p>
-              </div>
+            <div className="logo-text">
+              <h1>Migration<span className="highlight">GPT</span></h1>
+              <p className="tagline">AI-Powered Cloud Migration Intelligence</p>
             </div>
           </div>
+          <div className="header-actions">
+            <button className="icon-button">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.35-4.35"/>
+              </svg>
+            </button>
+            <button className="icon-button">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+              </svg>
+            </button>
+            <div className="user-avatar">B</div>
+          </div>
+        </div>
+      </header>
+
+      {/* Navigation Tabs */}
+      <nav className="nav-tabs">
+        <button 
+          className={`nav-tab ${activeTab === 'upload' ? 'active' : ''}`}
+          onClick={() => setActiveTab('upload')}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          New Analysis
+        </button>
+        {results && (
+          <button 
+            className={`nav-tab ${activeTab === 'results' ? 'active' : ''}`}
+            onClick={() => setActiveTab('results')}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <line x1="18" y1="20" x2="18" y2="10"/>
+              <line x1="12" y1="20" x2="12" y2="4"/>
+              <line x1="6" y1="20" x2="6" y2="14"/>
+            </svg>
+            Results
+          </button>
         )}
-      </div>
+      </nav>
+
+      {/* Main Content */}
+      <main className="main-content">
+        {loading ? (
+          <LoadingScreen />
+        ) : activeTab === 'upload' ? (
+          <div className="upload-section">
+            <div className="upload-container">
+              <div className="section-header">
+                <h2>Cloud Migration Assessment</h2>
+                <p>Select your infrastructure files from GitHub for AI-powered analysis</p>
+              </div>
+
+              <div className="form-section">
+                <label className="form-label">Project Name</label>
+                <input
+                  type="text"
+                  value={projectName}
+                  onChange={(e) => setProjectName(e.target.value)}
+                  placeholder="e.g., AWS Production Migration"
+                  className="form-input"
+                />
+              </div>
+
+              <GitHubFileBrowser 
+                onFileSelect={handleFileSelect}
+                selectedFile={selectedFile}
+              />
+
+              {error && (
+                <div className="alert alert-error">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                  {error}
+                </div>
+              )}
+
+              <button
+                onClick={handleAnalyze}
+                disabled={!selectedFile || loading}
+                className="analyze-button"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+                Start AI Analysis
+              </button>
+            </div>
+          </div>
+        ) : (
+          <ResultsDashboard results={results} projectName={projectName} />
+        )}
+      </main>
+
+      {/* Footer */}
+      <footer className="app-footer">
+        <div className="footer-content">
+          <p>© 2024 MigrationGPT. Built by Bharath K.</p>
+          <div className="footer-links">
+            <a href="#">Documentation</a>
+            <a href="#">API</a>
+            <a href="#">Support</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
