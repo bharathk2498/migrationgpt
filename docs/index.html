@@ -15,15 +15,12 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             padding: 2rem;
         }
         
         .container {
-            max-width: 900px;
-            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
             background: white;
             border-radius: 24px;
             padding: 3rem;
@@ -162,9 +159,6 @@
         
         .results {
             margin-top: 2rem;
-            padding: 2rem;
-            background: #f9fafb;
-            border-radius: 16px;
             display: none;
         }
         
@@ -172,53 +166,514 @@
             display: block;
         }
         
-        .results h3 {
+        .section-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .section-header h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .section-header p {
+            opacity: 0.9;
+        }
+        
+        .executive-summary {
+            background: #f9fafb;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+        }
+        
+        .executive-summary h3 {
             color: #111827;
             margin-bottom: 1.5rem;
             font-size: 1.5rem;
-            font-weight: 700;
         }
         
-        .metrics {
+        .metrics-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
         
-        .metric {
+        .metric-card {
             background: white;
             padding: 1.5rem;
             border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             text-align: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-4px);
         }
         
         .metric-value {
             font-size: 2.5rem;
             font-weight: 700;
-            color: #667eea;
             margin-bottom: 0.5rem;
+        }
+        
+        .metric-value.success {
+            color: #10b981;
+        }
+        
+        .metric-value.warning {
+            color: #f59e0b;
+        }
+        
+        .metric-value.danger {
+            color: #ef4444;
+        }
+        
+        .metric-value.primary {
+            color: #667eea;
         }
         
         .metric-label {
             color: #6b7280;
             font-size: 0.875rem;
             font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
-        .note {
-            padding: 1.25rem;
+        .metric-sublabel {
+            color: #9ca3af;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+        }
+        
+        .risk-breakdown {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .risk-breakdown h3 {
+            color: #111827;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .risk-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: #f9fafb;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .risk-category {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .risk-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .risk-icon.critical {
+            background: #ef4444;
+        }
+        
+        .risk-icon.high {
+            background: #f59e0b;
+        }
+        
+        .risk-icon.medium {
+            background: #3b82f6;
+        }
+        
+        .risk-icon.low {
+            background: #10b981;
+        }
+        
+        .risk-details h4 {
+            color: #111827;
+            margin-bottom: 0.25rem;
+        }
+        
+        .risk-details p {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        
+        .risk-score {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .findings-list {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .findings-list h3 {
+            color: #111827;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .finding-item {
+            padding: 1.5rem;
+            border-left: 4px solid;
+            background: #f9fafb;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .finding-item.critical {
+            border-color: #ef4444;
+        }
+        
+        .finding-item.high {
+            border-color: #f59e0b;
+        }
+        
+        .finding-item.medium {
+            border-color: #3b82f6;
+        }
+        
+        .finding-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        
+        .finding-title {
+            font-weight: 600;
+            color: #111827;
+            font-size: 1.125rem;
+        }
+        
+        .severity-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .severity-badge.critical {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .severity-badge.high {
             background: #fef3c7;
-            border: 1px solid #fbbf24;
-            border-radius: 10px;
             color: #92400e;
-            font-size: 0.9375rem;
+        }
+        
+        .severity-badge.medium {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .finding-description {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+        
+        .finding-impact {
+            color: #6b7280;
+            font-size: 0.875rem;
+            font-style: italic;
+        }
+        
+        .cost-breakdown {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .cost-breakdown h3 {
+            color: #111827;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .cost-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .cost-item:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+        
+        .cost-label {
+            color: #4b5563;
+        }
+        
+        .cost-value {
+            color: #111827;
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+        
+        .timeline {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .timeline h3 {
+            color: #111827;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .timeline-item {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .timeline-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 40px;
+            width: 2px;
+            height: calc(100% - 20px);
+            background: #e5e7eb;
+        }
+        
+        .timeline-marker {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            z-index: 1;
+        }
+        
+        .timeline-content {
+            flex: 1;
+        }
+        
+        .timeline-content h4 {
+            color: #111827;
+            margin-bottom: 0.5rem;
+            font-size: 1.125rem;
+        }
+        
+        .timeline-content p {
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-duration {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .recommendations {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .recommendations h3 {
+            color: #111827;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .recommendation-item {
+            padding: 1.5rem;
+            background: #f9fafb;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #667eea;
+        }
+        
+        .recommendation-item h4 {
+            color: #111827;
+            margin-bottom: 0.75rem;
+            font-size: 1.125rem;
+        }
+        
+        .recommendation-item p {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .recommendation-meta {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.875rem;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #6b7280;
+        }
+        
+        .meta-item strong {
+            color: #111827;
+        }
+        
+        .roi-section {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+        }
+        
+        .roi-section h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .roi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .roi-item {
+            text-align: center;
+        }
+        
+        .roi-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .roi-label {
+            opacity: 0.9;
+            font-size: 0.875rem;
+        }
+        
+        .next-steps {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .next-steps h3 {
+            color: #111827;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .step-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .step-content h4 {
+            color: #111827;
+            margin-bottom: 0.5rem;
+        }
+        
+        .step-content p {
+            color: #6b7280;
             line-height: 1.6;
         }
         
-        .note strong {
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .cta-button {
+            flex: 1;
+            min-width: 200px;
+            padding: 1rem 2rem;
+            border-radius: 12px;
             font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .cta-button.primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .cta-button.secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
         }
         
         .github-link {
@@ -267,7 +722,7 @@
             <div class="file-preview" id="filePreview">
                 <div class="file-info">
                     <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0  0 2-2V9z"/>
+                        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
                         <polyline points="13 2 13 9 20 9"/>
                     </svg>
                     <div>
@@ -283,37 +738,361 @@
         </button>
         
         <div class="results" id="results">
-            <h3>Analysis Results (Demo)</h3>
-            <div class="metrics">
-                <div class="metric">
-                    <div class="metric-value">75</div>
-                    <div class="metric-label">Risk Score</div>
-                </div>
-                <div class="metric">
-                    <div class="metric-value">12</div>
-                    <div class="metric-label">Findings</div>
-                </div>
-                <div class="metric">
-                    <div class="metric-value">$340K</div>
-                    <div class="metric-label">Est. Cost</div>
-                </div>
-                <div class="metric">
-                    <div class="metric-value">20</div>
-                    <div class="metric-label">Weeks</div>
+            <div class="section-header">
+                <h2>Enterprise Migration Assessment Report</h2>
+                <p>Comprehensive AI-Powered Analysis for Cloud Transformation</p>
+            </div>
+            
+            <div class="executive-summary">
+                <h3>Executive Summary</h3>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value warning">78</div>
+                        <div class="metric-label">Risk Score</div>
+                        <div class="metric-sublabel">Medium-High Priority</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value danger">23</div>
+                        <div class="metric-label">Critical Findings</div>
+                        <div class="metric-sublabel">Immediate Action Required</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value primary">$485K</div>
+                        <div class="metric-label">Total Investment</div>
+                        <div class="metric-sublabel">24-Month TCO</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value success">26</div>
+                        <div class="metric-label">Weeks Timeline</div>
+                        <div class="metric-sublabel">Discovery to Production</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value success">$2.1M</div>
+                        <div class="metric-label">3-Year Savings</div>
+                        <div class="metric-sublabel">Cost Optimization</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value warning">67</div>
+                        <div class="metric-label">Resources</div>
+                        <div class="metric-sublabel">To Be Migrated</div>
+                    </div>
                 </div>
             </div>
-            <div class="note">
-                <strong>Demo Mode:</strong> This is a frontend preview showing sample results. For complete AI-powered analysis with detailed security findings, cost breakdowns, and migration recommendations, visit the full application.
+            
+            <div class="risk-breakdown">
+                <h3>Risk Assessment Breakdown</h3>
+                <div class="risk-item">
+                    <div class="risk-category">
+                        <div class="risk-icon critical">C</div>
+                        <div class="risk-details">
+                            <h4>Security & Compliance</h4>
+                            <p>Encryption, IAM policies, data protection</p>
+                        </div>
+                    </div>
+                    <div class="risk-score">92/100</div>
+                </div>
+                <div class="risk-item">
+                    <div class="risk-category">
+                        <div class="risk-icon high">H</div>
+                        <div class="risk-details">
+                            <h4>Technical Complexity</h4>
+                            <p>Legacy dependencies, integration points</p>
+                        </div>
+                    </div>
+                    <div class="risk-score">85/100</div>
+                </div>
+                <div class="risk-item">
+                    <div class="risk-category">
+                        <div class="risk-icon medium">M</div>
+                        <div class="risk-details">
+                            <h4>Operational Impact</h4>
+                            <p>Downtime, performance, user experience</p>
+                        </div>
+                    </div>
+                    <div class="risk-score">68/100</div>
+                </div>
+                <div class="risk-item">
+                    <div class="risk-category">
+                        <div class="risk-icon low">L</div>
+                        <div class="risk-details">
+                            <h4>Cost Overrun</h4>
+                            <p>Budget variance, resource allocation</p>
+                        </div>
+                    </div>
+                    <div class="risk-score">42/100</div>
+                </div>
             </div>
-        </div>
-        
-        <div class="github-link">
-            <a href="https://github.com/bharathk2498/migrationgpt" target="_blank">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                </svg>
-                View on GitHub
-            </a>
+            
+            <div class="findings-list">
+                <h3>Critical Security Findings</h3>
+                <div class="finding-item critical">
+                    <div class="finding-header">
+                        <div class="finding-title">Unencrypted Data at Rest</div>
+                        <span class="severity-badge critical">Critical</span>
+                    </div>
+                    <div class="finding-description">
+                        Database instances and S3 buckets are configured without server-side encryption. This exposes sensitive customer data to potential breaches and violates compliance requirements including GDPR, HIPAA, and PCI-DSS.
+                    </div>
+                    <div class="finding-impact">
+                        Impact: Data breach risk, compliance violations, potential fines up to $4.2M annually
+                    </div>
+                </div>
+                
+                <div class="finding-item critical">
+                    <div class="finding-header">
+                        <div class="finding-title">Overly Permissive IAM Policies</div>
+                        <span class="severity-badge critical">Critical</span>
+                    </div>
+                    <div class="finding-description">
+                        Multiple IAM roles have wildcard permissions allowing unrestricted access to all resources. This violates the principle of least privilege and creates significant security vulnerabilities for lateral movement in case of compromise.
+                    </div>
+                    <div class="finding-impact">
+                        Impact: Privilege escalation risk, unauthorized access, potential for complete infrastructure compromise
+                    </div>
+                </div>
+                
+                <div class="finding-item high">
+                    <div class="finding-header">
+                        <div class="finding-title">Missing MFA on Administrative Accounts</div>
+                        <span class="severity-badge high">High</span>
+                    </div>
+                    <div class="finding-description">
+                        Root and administrative user accounts lack multi-factor authentication enforcement. Single-factor authentication is insufficient for privileged access and increases risk of account takeover through phishing or credential theft.
+                    </div>
+                    <div class="finding-impact">
+                        Impact: Account compromise, unauthorized privileged access, potential ransomware deployment
+                    </div>
+                </div>
+                
+                <div class="finding-item high">
+                    <div class="finding-header">
+                        <div class="finding-title">Publicly Accessible Storage Buckets</div>
+                        <span class="severity-badge high">High</span>
+                    </div>
+                    <div class="finding-description">
+                        Storage buckets containing application backups and logs are configured with public read access. This exposes potentially sensitive operational data including API keys, database credentials, and customer information.
+                    </div>
+                    <div class="finding-impact">
+                        Impact: Data exposure, credential leakage, reconnaissance for targeted attacks
+                    </div>
+                </div>
+                
+                <div class="finding-item medium">
+                    <div class="finding-header">
+                        <div class="finding-title">Insufficient Logging and Monitoring</div>
+                        <span class="severity-badge medium">Medium</span>
+                    </div>
+                    <div class="finding-description">
+                        CloudTrail logging is not enabled for all regions and log retention is only 7 days. This limits forensic capability and incident response effectiveness, reducing visibility into security events.
+                    </div>
+                    <div class="finding-impact">
+                        Impact: Delayed threat detection, limited forensic evidence, compliance gaps
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cost-breakdown">
+                <h3>Detailed Cost Analysis</h3>
+                <div class="cost-item">
+                    <div class="cost-label">Migration Services & Tooling</div>
+                    <div class="cost-value">$145,000</div>
+                </div>
+                <div class="cost-item">
+                    <div class="cost-label">Professional Services & Consulting</div>
+                    <div class="cost-value">$98,000</div>
+                </div>
+                <div class="cost-item">
+                    <div class="cost-label">Infrastructure Setup & Configuration</div>
+                    <div class="cost-value">$67,000</div>
+                </div>
+                <div class="cost-item">
+                    <div class="cost-label">Security Implementation & Hardening</div>
+                    <div class="cost-value">$52,000</div>
+                </div>
+                <div class="cost-item">
+                    <div class="cost-label">Testing & Validation</div>
+                    <div class="cost-value">$43,000</div>
+                </div>
+                <div class="cost-item">
+                    <div class="cost-label">Training & Knowledge Transfer</div>
+                    <div class="cost-value">$38,000</div>
+                </div>
+                <div class="cost-item">
+                    <div class="cost-label">Contingency Reserve (15%)</div>
+                    <div class="cost-value">$42,000</div>
+                </div>
+                <div class="cost-item">
+                    <div class="cost-label">Total Migration Investment</div>
+                    <div class="cost-value">$485,000</div>
+                </div>
+            </div>
+            
+            <div class="timeline">
+                <h3>Migration Timeline & Phases</h3>
+                <div class="timeline-item">
+                    <div class="timeline-marker">1</div>
+                    <div class="timeline-content">
+                        <h4>Discovery & Assessment</h4>
+                        <p>Complete infrastructure inventory, dependency mapping, application profiling, and detailed technical assessment. Identify all migration waves and establish baseline metrics.</p>
+                        <span class="timeline-duration">4 weeks</span>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">2</div>
+                    <div class="timeline-content">
+                        <h4>Planning & Design</h4>
+                        <p>Architecture design, security framework implementation, compliance validation, cost optimization strategies, and detailed migration runbooks for each wave.</p>
+                        <span class="timeline-duration">5 weeks</span>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">3</div>
+                    <div class="timeline-content">
+                        <h4>Proof of Concept</h4>
+                        <p>Pilot migration of non-critical workloads, performance validation, security testing, disaster recovery drills, and stakeholder approval process.</p>
+                        <span class="timeline-duration">3 weeks</span>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">4</div>
+                    <div class="timeline-content">
+                        <h4>Migration Execution</h4>
+                        <p>Phased migration of production workloads in 3 waves, continuous monitoring, automated testing, rollback procedures, and 24/7 support coverage.</p>
+                        <span class="timeline-duration">10 weeks</span>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">5</div>
+                    <div class="timeline-content">
+                        <h4>Optimization & Stabilization</h4>
+                        <p>Performance tuning, cost optimization, security hardening, operational runbook validation, team training, and hypercare support period.</p>
+                        <span class="timeline-duration">4 weeks</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recommendations">
+                <h3>Strategic Recommendations</h3>
+                <div class="recommendation-item">
+                    <h4>Implement Zero Trust Security Architecture</h4>
+                    <p>Deploy comprehensive identity and access management with multi-factor authentication, implement encryption for all data at rest and in transit, enable detailed audit logging, and establish automated compliance monitoring. This addresses 78% of identified critical security findings.</p>
+                    <div class="recommendation-meta">
+                        <div class="meta-item"><strong>Impact:</strong> High</div>
+                        <div class="meta-item"><strong>Effort:</strong> 6 weeks</div>
+                        <div class="meta-item"><strong>Cost:</strong> $85K</div>
+                    </div>
+                </div>
+                
+                <div class="recommendation-item">
+                    <h4>Adopt Infrastructure as Code with GitOps</h4>
+                    <p>Migrate all infrastructure to Terraform with version control, implement automated testing and validation pipelines, establish environment parity, and enable rollback capabilities. This ensures consistency and reduces deployment risks by 65%.</p>
+                    <div class="recommendation-meta">
+                        <div class="meta-item"><strong>Impact:</strong> High</div>
+                        <div class="meta-item"><strong>Effort:</strong> 4 weeks</div>
+                        <div class="meta-item"><strong>Cost:</strong> $42K</div>
+                    </div>
+                </div>
+                
+                <div class="recommendation-item">
+                    <h4>Implement Comprehensive Observability</h4>
+                    <p>Deploy centralized logging, distributed tracing, application performance monitoring, and real-time alerting. Establish SLOs and automated incident response workflows to reduce MTTR by 75%.</p>
+                    <div class="recommendation-meta">
+                        <div class="meta-item"><strong>Impact:</strong> Medium</div>
+                        <div class="meta-item"><strong>Effort:</strong> 3 weeks</div>
+                        <div class="meta-item"><strong>Cost:</strong> $31K</div>
+                    </div>
+                </div>
+                
+                <div class="recommendation-item">
+                    <h4>Establish Cloud Center of Excellence</h4>
+                    <p>Create internal team for cloud governance, best practices documentation, cost optimization programs, and continuous improvement initiatives. This ensures long-term success and realizes maximum ROI from cloud investment.</p>
+                    <div class="recommendation-meta">
+                        <div class="meta-item"><strong>Impact:</strong> High</div>
+                        <div class="meta-item"><strong>Effort:</strong> Ongoing</div>
+                        <div class="meta-item"><strong>Cost:</strong> $120K annually</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="roi-section">
+                <h3>Expected Return on Investment</h3>
+                <div class="roi-grid">
+                    <div class="roi-item">
+                        <div class="roi-value">$2.1M</div>
+                        <div class="roi-label">3-Year Cost Savings</div>
+                    </div>
+                    <div class="roi-item">
+                        <div class="roi-value">8.6x</div>
+                        <div class="roi-label">ROI Multiplier</div>
+                    </div>
+                    <div class="roi-item">
+                        <div class="roi-value">18 mo</div>
+                        <div class="roi-label">Payback Period</div>
+                    </div>
+                    <div class="roi-item">
+                        <div class="roi-value">45%</div>
+                        <div class="roi-label">Infrastructure Cost Reduction</div>
+                    </div>
+                    <div class="roi-item">
+                        <div class="roi-value">99.95%</div>
+                        <div class="roi-label">Target Availability</div>
+                    </div>
+                    <div class="roi-item">
+                        <div class="roi-value">60%</div>
+                        <div class="roi-label">Faster Time to Market</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="next-steps">
+                <h3>Next Steps to Get Started</h3>
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Executive Briefing</h4>
+                        <p>Schedule a 60-minute session with your leadership team to review this assessment, discuss business objectives, and align on success criteria and timeline expectations.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Detailed Discovery Workshop</h4>
+                        <p>Conduct comprehensive 2-day technical workshop with your engineering team to validate findings, identify additional dependencies, and refine migration approach based on your specific requirements.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Proof of Concept Execution</h4>
+                        <p>Execute focused 3-week POC on selected non-critical workload to validate technical approach, demonstrate value, and build confidence with your team before full-scale migration.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Kickoff & Begin Migration</h4>
+                        <p>Finalize statement of work, assemble dedicated migration team, establish governance and communication cadence, and begin Phase 1 discovery with your full production environment.</p>
+                    </div>
+                </div>
+                
+                <div class="cta-buttons">
+                    <button class="cta-button primary" onclick="alert('Thank you for your interest! This demo shows the comprehensive analysis capabilities. Contact us to schedule your real assessment.')">
+                        Schedule Executive Briefing
+                    </button>
+                    <button class="cta-button secondary" onclick="window.print()">
+                        Download Full Report
+                    </button>
+                </div>
+            </div>
+            
+            <div class="github-link">
+                <a href="https://github.com/bharathk2498/migrationgpt" target="_blank">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    Powered by MigrationGPT
+                </a>
+            </div>
         </div>
     </div>
     
@@ -360,14 +1139,19 @@
         }
         
         analyzeBtn.addEventListener('click', () => {
-            results.classList.add('active');
-            analyzeBtn.textContent = '✓ Analysis Complete!';
+            analyzeBtn.textContent = 'Analyzing...';
             analyzeBtn.disabled = true;
             
             setTimeout(() => {
-                analyzeBtn.textContent = 'Start AI Analysis';
-                analyzeBtn.disabled = false;
-            }, 3000);
+                results.classList.add('active');
+                results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                analyzeBtn.textContent = 'Analysis Complete';
+                
+                setTimeout(() => {
+                    analyzeBtn.textContent = 'Start AI Analysis';
+                    analyzeBtn.disabled = false;
+                }, 2000);
+            }, 1500);
         });
     </script>
 </body>
