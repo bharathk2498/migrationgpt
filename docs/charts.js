@@ -1,5 +1,5 @@
 // Chart configurations and rendering
-// STATIC MODE: Cost Analysis chart animations disabled
+// STATIC MODE: Cost Analysis and 7R Strategy charts - NO animations
 
 let osChart, strategyChart, costChart;
 
@@ -85,7 +85,7 @@ function renderOSChart(analysis) {
     });
 }
 
-// 7R Strategy Chart
+// 7R Strategy Chart - STATIC MODE
 function render7RChart(analysis) {
     const ctx = document.getElementById('strategyChart').getContext('2d');
     
@@ -170,17 +170,7 @@ function render7RChart(analysis) {
                     }
                 }
             },
-            animation: {
-                duration: 2000,
-                easing: 'easeInOutQuart',
-                delay: (context) => {
-                    let delay = 0;
-                    if (context.type === 'data' && context.mode === 'default') {
-                        delay = context.dataIndex * 100;
-                    }
-                    return delay;
-                }
-            }
+            animation: false  // STATIC MODE - NO ANIMATION
         }
     });
 }
