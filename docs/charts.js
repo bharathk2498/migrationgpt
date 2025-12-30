@@ -1,4 +1,5 @@
 // Chart configurations and rendering
+// STATIC MODE: Cost Analysis chart animations disabled
 
 let osChart, strategyChart, costChart;
 
@@ -184,7 +185,7 @@ function render7RChart(analysis) {
     });
 }
 
-// Cost Analysis Chart
+// Cost Analysis Chart - STATIC MODE
 function renderCostChart(analysis) {
     const ctx = document.getElementById('costChart').getContext('2d');
     
@@ -274,17 +275,7 @@ function renderCostChart(analysis) {
                     }
                 }
             },
-            animation: {
-                duration: 2000,
-                easing: 'easeInOutQuart',
-                delay: (context) => {
-                    let delay = 0;
-                    if (context.type === 'data' && context.mode === 'default') {
-                        delay = context.dataIndex * 150;
-                    }
-                    return delay;
-                }
-            }
+            animation: false  // STATIC MODE - NO ANIMATION
         }
     });
 }
