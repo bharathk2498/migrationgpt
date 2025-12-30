@@ -1,4 +1,5 @@
 // Advanced animations and micro-interactions using GSAP
+// STATIC MODE: Priority Servers table and Cost Analysis chart disabled
 
 document.addEventListener('DOMContentLoaded', () => {
     // Register GSAP plugins
@@ -245,8 +246,13 @@ function animatePageTransition(fromView, toView) {
     });
 }
 
-// Chart Animation Enhancement
+// Chart Animation Enhancement - DISABLED FOR COST CHART
 function animateChartEntry(chart) {
+    // Skip animation if it's the cost chart
+    if (chart.canvas.id === 'costChart') {
+        return; // NO ANIMATION
+    }
+    
     const canvas = chart.canvas;
     
     gsap.from(canvas, {
@@ -352,8 +358,13 @@ function animateBadge(badge) {
     );
 }
 
-// Table Row Slide-In
+// Table Row Slide-In - DISABLED FOR PRIORITY SERVERS
 function animateTableRows(table) {
+    // Skip animation if it's the risk table (Priority Servers)
+    if (table.closest('#riskTable')) {
+        return; // NO ANIMATION
+    }
+    
     const rows = table.querySelectorAll('tbody tr');
     
     gsap.from(rows, {
