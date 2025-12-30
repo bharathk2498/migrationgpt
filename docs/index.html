@@ -3,8 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MigrationGPT - AI-Powered Cloud Migration Assessment</title>
+    <title>MigrationGPT - Enterprise Cloud Migration Platform</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PptxGenJS/3.12.0/pptxgen.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
     <style>
+        :root {
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --secondary: #8b5cf6;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -12,1147 +41,792 @@
         }
         
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 2rem;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 24px;
-            padding: 3rem;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        
-        .logo {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        
-        .logo h1 {
-            font-size: 3rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.5rem;
-            font-weight: 800;
-        }
-        
-        .logo p {
-            color: #6b7280;
-            font-size: 1.125rem;
-        }
-        
-        .upload-section {
-            margin: 2rem 0;
-        }
-        
-        .upload-zone {
-            border: 3px dashed #d1d5db;
-            border-radius: 16px;
-            padding: 3rem 2rem;
-            text-align: center;
-            transition: all 0.3s;
-            cursor: pointer;
-            background: #f9fafb;
-        }
-        
-        .upload-zone:hover {
-            border-color: #667eea;
-            background: #ede9fe;
-        }
-        
-        .upload-zone.drag-over {
-            border-color: #667eea;
-            background: #ede9fe;
-            transform: scale(1.02);
-        }
-        
-        .upload-icon {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 1rem;
-            color: #9ca3af;
-        }
-        
-        .upload-zone h3 {
-            font-size: 1.5rem;
-            color: #111827;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-        
-        .upload-zone p {
-            color: #6b7280;
-            margin-bottom: 1.5rem;
-        }
-        
-        .upload-button {
-            display: inline-block;
-            padding: 1rem 2rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
             color: white;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        
-        .upload-button:hover {
-            transform: translateY(-2px);
-        }
-        
-        input[type="file"] {
-            display: none;
-        }
-        
-        .file-preview {
-            margin-top: 1.5rem;
-            padding: 1rem;
-            background: #f3f4f6;
-            border-radius: 12px;
-            display: none;
-        }
-        
-        .file-preview.active {
-            display: block;
-        }
-        
-        .file-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .file-icon {
-            width: 40px;
-            height: 40px;
-            color: #667eea;
-        }
-        
-        .analyze-button {
-            width: 100%;
-            padding: 1.25rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.125rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 2rem;
-            transition: transform 0.2s;
-        }
-        
-        .analyze-button:hover:not(:disabled) {
-            transform: translateY(-2px);
-        }
-        
-        .analyze-button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        .results {
-            margin-top: 2rem;
-            display: none;
-        }
-        
-        .results.active {
-            display: block;
-        }
-        
-        .section-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-        
-        .section-header h2 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .section-header p {
-            opacity: 0.9;
-        }
-        
-        .executive-summary {
-            background: #f9fafb;
-            padding: 2rem;
-            border-radius: 16px;
-            margin-bottom: 2rem;
-        }
-        
-        .executive-summary h3 {
-            color: #111827;
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-        }
-        
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .metric-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            text-align: center;
-            transition: transform 0.2s;
-        }
-        
-        .metric-card:hover {
-            transform: translateY(-4px);
-        }
-        
-        .metric-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-        
-        .metric-value.success {
-            color: #10b981;
-        }
-        
-        .metric-value.warning {
-            color: #f59e0b;
-        }
-        
-        .metric-value.danger {
-            color: #ef4444;
-        }
-        
-        .metric-value.primary {
-            color: #667eea;
-        }
-        
-        .metric-label {
-            color: #6b7280;
-            font-size: 0.875rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .metric-sublabel {
-            color: #9ca3af;
-            font-size: 0.75rem;
-            margin-top: 0.25rem;
-        }
-        
-        .risk-breakdown {
-            background: white;
-            padding: 2rem;
-            border-radius: 16px;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        .risk-breakdown h3 {
-            color: #111827;
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-        }
-        
-        .risk-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1rem;
-            background: #f9fafb;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-        }
-        
-        .risk-category {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .risk-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: white;
-        }
-        
-        .risk-icon.critical {
-            background: #ef4444;
-        }
-        
-        .risk-icon.high {
-            background: #f59e0b;
-        }
-        
-        .risk-icon.medium {
-            background: #3b82f6;
-        }
-        
-        .risk-icon.low {
-            background: #10b981;
-        }
-        
-        .risk-details h4 {
-            color: #111827;
-            margin-bottom: 0.25rem;
-        }
-        
-        .risk-details p {
-            color: #6b7280;
-            font-size: 0.875rem;
-        }
-        
-        .risk-score {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #667eea;
-        }
-        
-        .findings-list {
-            background: white;
-            padding: 2rem;
-            border-radius: 16px;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        .findings-list h3 {
-            color: #111827;
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-        }
-        
-        .finding-item {
-            padding: 1.5rem;
-            border-left: 4px solid;
-            background: #f9fafb;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-        }
-        
-        .finding-item.critical {
-            border-color: #ef4444;
-        }
-        
-        .finding-item.high {
-            border-color: #f59e0b;
-        }
-        
-        .finding-item.medium {
-            border-color: #3b82f6;
-        }
-        
-        .finding-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.75rem;
-        }
-        
-        .finding-title {
-            font-weight: 600;
-            color: #111827;
-            font-size: 1.125rem;
-        }
-        
-        .severity-badge {
-            padding: 0.25rem 0.75rem;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        
-        .severity-badge.critical {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-        
-        .severity-badge.high {
-            background: #fef3c7;
-            color: #92400e;
-        }
-        
-        .severity-badge.medium {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-        
-        .finding-description {
-            color: #4b5563;
-            line-height: 1.6;
-            margin-bottom: 0.75rem;
-        }
-        
-        .finding-impact {
-            color: #6b7280;
-            font-size: 0.875rem;
-            font-style: italic;
-        }
-        
-        .cost-breakdown {
-            background: white;
-            padding: 2rem;
-            border-radius: 16px;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        .cost-breakdown h3 {
-            color: #111827;
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-        }
-        
-        .cost-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        
-        .cost-item:last-child {
-            border-bottom: none;
-            font-weight: 600;
-            background: #f9fafb;
-            border-radius: 8px;
-        }
-        
-        .cost-label {
-            color: #4b5563;
-        }
-        
-        .cost-value {
-            color: #111827;
-            font-weight: 600;
-            font-size: 1.125rem;
-        }
-        
-        .timeline {
-            background: white;
-            padding: 2rem;
-            border-radius: 16px;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        .timeline h3 {
-            color: #111827;
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-        }
-        
-        .timeline-item {
-            display: flex;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
+            overflow-x: hidden;
             position: relative;
         }
         
-        .timeline-item:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            left: 19px;
-            top: 40px;
-            width: 2px;
-            height: calc(100% - 20px);
-            background: #e5e7eb;
+        /* Particles Background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            opacity: 0.6;
         }
         
-        .timeline-marker {
-            width: 40px;
-            height: 40px;
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .glass-card:hover::before {
+            left: 100%;
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(14, 165, 233, 0.3);
+            border-color: rgba(14, 165, 233, 0.5);
+        }
+        
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 50%, #f59e0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 5s ease infinite;
+            background-size: 200% 200%;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        /* Animated Gradients */
+        .animated-gradient {
+            background: linear-gradient(-45deg, #0ea5e9, #8b5cf6, #f59e0b, #10b981);
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
+        }
+        
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Neumorphic Elements */
+        .neumorphic {
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 
+                8px 8px 16px rgba(0, 0, 0, 0.4),
+                -8px -8px 16px rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #0ea5e9, #8b5cf6);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #0284c7, #7c3aed);
+        }
+        
+        /* Button Animations */
+        .btn-primary {
+            background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+            border: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.4);
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn-primary:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(14, 165, 233, 0.6);
+        }
+        
+        .btn-primary span {
+            position: relative;
             z-index: 1;
         }
         
-        .timeline-content {
-            flex: 1;
+        /* Metric Cards */
+        .metric-card {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border: 2px solid rgba(14, 165, 233, 0.2);
+            border-radius: 20px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
         }
         
-        .timeline-content h4 {
-            color: #111827;
-            margin-bottom: 0.5rem;
-            font-size: 1.125rem;
+        .metric-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
         }
         
-        .timeline-content p {
-            color: #6b7280;
-            line-height: 1.6;
-            margin-bottom: 0.5rem;
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
         }
         
-        .timeline-duration {
-            color: #667eea;
-            font-weight: 600;
-            font-size: 0.875rem;
+        .metric-value {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, #0ea5e9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
-        .recommendations {
-            background: white;
-            padding: 2rem;
-            border-radius: 16px;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        .recommendations h3 {
-            color: #111827;
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-        }
-        
-        .recommendation-item {
-            padding: 1.5rem;
-            background: #f9fafb;
-            border-radius: 12px;
-            margin-bottom: 1rem;
-            border-left: 4px solid #667eea;
-        }
-        
-        .recommendation-item h4 {
-            color: #111827;
-            margin-bottom: 0.75rem;
-            font-size: 1.125rem;
-        }
-        
-        .recommendation-item p {
-            color: #4b5563;
-            line-height: 1.6;
-            margin-bottom: 1rem;
-        }
-        
-        .recommendation-meta {
-            display: flex;
-            gap: 2rem;
-            font-size: 0.875rem;
-        }
-        
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: #6b7280;
-        }
-        
-        .meta-item strong {
-            color: #111827;
-        }
-        
-        .roi-section {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            padding: 2rem;
-            border-radius: 16px;
-            margin-bottom: 2rem;
-        }
-        
-        .roi-section h3 {
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-        }
-        
-        .roi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .roi-item {
-            text-align: center;
-        }
-        
-        .roi-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-        
-        .roi-label {
-            opacity: 0.9;
-            font-size: 0.875rem;
-        }
-        
-        .next-steps {
-            background: white;
-            padding: 2rem;
-            border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        .next-steps h3 {
-            color: #111827;
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-        }
-        
-        .step-item {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .step-number {
-            width: 32px;
-            height: 32px;
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            border-top-color: #0ea5e9;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Skeleton Loading */
+        .skeleton {
+            background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 8px;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* File Upload Zone */
+        .upload-zone {
+            border: 3px dashed rgba(14, 165, 233, 0.3);
+            border-radius: 20px;
+            padding: 60px;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: rgba(14, 165, 233, 0.05);
+        }
+        
+        .upload-zone.dragover {
+            border-color: #0ea5e9;
+            background: rgba(14, 165, 233, 0.15);
+            transform: scale(1.02);
+        }
+        
+        .upload-zone:hover {
+            border-color: #0ea5e9;
+            background: rgba(14, 165, 233, 0.1);
+        }
+        
+        /* Chart Container */
+        .chart-container {
+            position: relative;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            z-index: 10000;
+            transform: translateX(400px);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            background: rgba(16, 185, 129, 0.9);
+            border: 1px solid rgba(16, 185, 129, 0.5);
+        }
+        
+        .toast.error {
+            background: rgba(239, 68, 68, 0.9);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+        }
+        
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            flex-shrink: 0;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
         }
         
-        .step-content h4 {
-            color: #111827;
-            margin-bottom: 0.5rem;
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
         }
         
-        .step-content p {
-            color: #6b7280;
-            line-height: 1.6;
+        .modal-content {
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
         }
         
-        .cta-buttons {
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+        
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
             display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-        
-        .cta-button {
-            flex: 1;
-            min-width: 200px;
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            font-weight: 600;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.2s;
-            border: none;
-            font-size: 1rem;
-        }
-        
-        .cta-button:hover {
-            transform: translateY(-2px);
-        }
-        
-        .cta-button.primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        
-        .cta-button.secondary {
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-        }
-        
-        .github-link {
-            text-align: center;
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid #e5e7eb;
-        }
-        
-        .github-link a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 500;
-            display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            justify-content: center;
+            box-shadow: 0 8px 30px rgba(14, 165, 233, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
         }
         
-        .github-link a:hover {
-            text-decoration: underline;
+        .fab:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 12px 40px rgba(14, 165, 233, 0.6);
+        }
+        
+        /* Progress Bar */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0ea5e9, #8b5cf6, #f59e0b);
+            background-size: 200% 100%;
+            animation: progressAnimation 2s ease infinite;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        
+        @keyframes progressAnimation {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            background: rgba(14, 165, 233, 0.2);
+            border: 1px solid rgba(14, 165, 233, 0.4);
+            color: #0ea5e9;
+        }
+        
+        .badge.success {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: rgba(16, 185, 129, 0.4);
+            color: #10b981;
+        }
+        
+        .badge.warning {
+            background: rgba(245, 158, 11, 0.2);
+            border-color: rgba(245, 158, 11, 0.4);
+            color: #f59e0b;
+        }
+        
+        .badge.danger {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.4);
+            color: #ef4444;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease;
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .slide-in-left {
+            animation: slideInLeft 0.6s ease;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .metric-value {
+                font-size: 2rem;
+            }
+            
+            .glass-card {
+                border-radius: 16px;
+            }
+            
+            .btn-primary {
+                padding: 12px 24px;
+            }
+        }
+        
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+        
+        .relative {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Glow Effect */
+        .glow {
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.5),
+                        0 0 40px rgba(14, 165, 233, 0.3),
+                        0 0 60px rgba(14, 165, 233, 0.2);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">
-            <h1>MigrationGPT</h1>
-            <p>AI-Powered Cloud Migration Assessment</p>
-        </div>
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
+    
+    <!-- Main Container -->
+    <div class="relative min-h-screen">
         
-        <div class="upload-section">
-            <div class="upload-zone" id="uploadZone">
-                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                    <polyline points="17 8 12 3 7 8"/>
-                    <line x1="12" y1="3" x2="12" y2="15"/>
-                </svg>
-                <h3>Upload Infrastructure File</h3>
-                <p>Drag and drop your Terraform, CloudFormation, or YAML file</p>
-                <label for="fileInput" class="upload-button">
-                    Browse Files
-                </label>
-                <input type="file" id="fileInput" accept=".tf,.json,.yaml,.yml">
+        <!-- Navigation -->
+        <nav class="glass fixed top-0 left-0 right-0 z-50 px-6 py-4">
+            <div class="max-w-7xl mx-auto flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center glow">
+                        <i data-lucide="cloud" class="w-6 h-6"></i>
+                    </div>
+                    <span class="text-2xl font-bold gradient-text">MigrationGPT</span>
+                    <span class="badge">Enterprise</span>
+                </div>
+                
+                <div class="flex items-center space-x-6">
+                    <button onclick="showView('home')" class="hover:text-blue-400 transition-colors">Home</button>
+                    <button onclick="showView('upload')" class="hover:text-blue-400 transition-colors">New Assessment</button>
+                    <button onclick="showView('assessments')" class="hover:text-blue-400 transition-colors">History</button>
+                    <button class="btn-primary"><span>Get Started</span></button>
+                </div>
             </div>
-            
-            <div class="file-preview" id="filePreview">
-                <div class="file-info">
-                    <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
-                        <polyline points="13 2 13 9 20 9"/>
-                    </svg>
+        </nav>
+        
+        <!-- Hero Section -->
+        <section id="homeView" class="relative pt-32 pb-20 px-6">
+            <div class="max-w-7xl mx-auto">
+                <!-- Hero Content -->
+                <div class="text-center mb-20 fade-in-up">
+                    <div class="inline-block mb-6">
+                        <span class="badge success">AI-Powered Migration Analysis</span>
+                    </div>
+                    <h1 class="text-7xl font-black mb-6">
+                        <span class="gradient-text">Cloud Migration</span><br>
+                        Simplified
+                    </h1>
+                    <p class="text-2xl text-gray-300 mb-12 max-w-3xl mx-auto">
+                        Enterprise-grade infrastructure assessment with AI-powered 7R strategies, 
+                        TCO analysis, and professional reports in minutes
+                    </p>
+                    <div class="flex items-center justify-center space-x-6">
+                        <button onclick="showView('upload')" class="btn-primary text-lg">
+                            <span class="flex items-center space-x-2">
+                                <i data-lucide="upload-cloud" class="w-5 h-5"></i>
+                                <span>Start Assessment</span>
+                            </span>
+                        </button>
+                        <button onclick="loadSampleData()" class="btn-primary text-lg" style="background: linear-gradient(135deg, #10b981, #0ea5e9);">
+                            <span class="flex items-center space-x-2">
+                                <i data-lucide="play" class="w-5 h-5"></i>
+                                <span>Try Demo</span>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Feature Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+                    <div class="glass-card p-8 slide-in-left" style="animation-delay: 0.1s;">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mb-4 glow">
+                            <i data-lucide="zap" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Instant Analysis</h3>
+                        <p class="text-gray-400">2 minutes vs 2 weeks traditional assessment</p>
+                    </div>
+                    
+                    <div class="glass-card p-8 slide-in-left" style="animation-delay: 0.2s;">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mb-4 glow">
+                            <i data-lucide="target" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">7R Strategy</h3>
+                        <p class="text-gray-400">AI-powered migration recommendations</p>
+                    </div>
+                    
+                    <div class="glass-card p-8 slide-in-left" style="animation-delay: 0.3s;">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center mb-4 glow">
+                            <i data-lucide="dollar-sign" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">TCO Analysis</h3>
+                        <p class="text-gray-400">Detailed cost modeling & ROI projection</p>
+                    </div>
+                    
+                    <div class="glass-card p-8 slide-in-left" style="animation-delay: 0.4s;">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center mb-4 glow">
+                            <i data-lucide="file-text" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Pro Reports</h3>
+                        <p class="text-gray-400">PowerPoint & Excel executive exports</p>
+                    </div>
+                </div>
+                
+                <!-- Stats Section -->
+                <div class="glass p-12 rounded-3xl">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+                        <div>
+                            <div class="text-5xl font-black gradient-text mb-2">500+</div>
+                            <div class="text-gray-400">Assessments Completed</div>
+                        </div>
+                        <div>
+                            <div class="text-5xl font-black gradient-text mb-2">95%</div>
+                            <div class="text-gray-400">Accuracy Rate</div>
+                        </div>
+                        <div>
+                            <div class="text-5xl font-black gradient-text mb-2">$100M+</div>
+                            <div class="text-gray-400">Costs Analyzed</div>
+                        </div>
+                        <div>
+                            <div class="text-5xl font-black gradient-text mb-2">2min</div>
+                            <div class="text-gray-400">Average Time</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Upload Section -->
+        <section id="uploadView" class="hidden relative pt-32 pb-20 px-6">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-5xl font-black gradient-text mb-4">New Assessment</h2>
+                    <p class="text-xl text-gray-300">Upload your infrastructure inventory to begin</p>
+                </div>
+                
+                <!-- Multi-Step Progress -->
+                <div class="mb-12">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center font-bold">1</div>
+                            <span class="font-semibold">Upload Data</span>
+                        </div>
+                        <div class="flex-1 h-2 mx-4 bg-gray-700 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-blue-500 to-purple-600 w-1/3"></div>
+                        </div>
+                        <div class="flex items-center space-x-2 opacity-50">
+                            <div class="w-10 h-10 rounded-full border-2 border-gray-600 flex items-center justify-center font-bold">2</div>
+                            <span class="font-semibold">Analysis</span>
+                        </div>
+                        <div class="flex-1 h-2 mx-4 bg-gray-700 rounded-full"></div>
+                        <div class="flex items-center space-x-2 opacity-50">
+                            <div class="w-10 h-10 rounded-full border-2 border-gray-600 flex items-center justify-center font-bold">3</div>
+                            <span class="font-semibold">Results</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Upload Zone -->
+                <div class="glass-card p-12 mb-8">
+                    <div id="dropZone" class="upload-zone">
+                        <div class="mb-6">
+                            <i data-lucide="upload-cloud" class="w-24 h-24 mx-auto text-blue-400 mb-4"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Drag & Drop Files</h3>
+                        <p class="text-gray-400 mb-6">or click to browse</p>
+                        <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" class="hidden">
+                        <button onclick="document.getElementById('fileInput').click()" class="btn-primary">
+                            <span class="flex items-center space-x-2">
+                                <i data-lucide="folder" class="w-5 h-5"></i>
+                                <span>Select File</span>
+                            </span>
+                        </button>
+                        <p class="text-sm text-gray-500 mt-4">Supported: Excel (.xlsx, .xls) or CSV</p>
+                    </div>
+                </div>
+                
+                <!-- Template Downloads -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass-card p-6 text-center">
+                        <i data-lucide="download" class="w-12 h-12 mx-auto mb-3 text-blue-400"></i>
+                        <h4 class="font-semibold mb-2">RVTools Template</h4>
+                        <button onclick="generateRVToolsTemplate()" class="text-blue-400 hover:text-blue-300">Download</button>
+                    </div>
+                    <div class="glass-card p-6 text-center">
+                        <i data-lucide="download" class="w-12 h-12 mx-auto mb-3 text-purple-400"></i>
+                        <h4 class="font-semibold mb-2">VMware Template</h4>
+                        <button onclick="generateVMwareTemplate()" class="text-purple-400 hover:text-purple-300">Download</button>
+                    </div>
+                    <div class="glass-card p-6 text-center">
+                        <i data-lucide="download" class="w-12 h-12 mx-auto mb-3 text-green-400"></i>
+                        <h4 class="font-semibold mb-2">Manual Template</h4>
+                        <button onclick="generateManualTemplate()" class="text-green-400 hover:text-green-300">Download</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Dashboard Section -->
+        <section id="dashboardView" class="hidden relative pt-32 pb-20 px-6">
+            <div class="max-w-7xl mx-auto">
+                <!-- Header -->
+                <div class="flex items-center justify-between mb-12">
                     <div>
-                        <div id="fileName" style="font-weight: 600; color: #111827;"></div>
-                        <div id="fileSize" style="color: #6b7280; font-size: 0.875rem;"></div>
+                        <h2 class="text-5xl font-black gradient-text mb-2">Assessment Results</h2>
+                        <p class="text-gray-400">Comprehensive migration analysis</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button onclick="exportToExcel()" class="btn-primary">
+                            <span class="flex items-center space-x-2">
+                                <i data-lucide="file-spreadsheet" class="w-5 h-5"></i>
+                                <span>Export Excel</span>
+                            </span>
+                        </button>
+                        <button onclick="generatePowerPoint()" class="btn-primary" style="background: linear-gradient(135deg, #10b981, #0ea5e9);">
+                            <span class="flex items-center space-x-2">
+                                <i data-lucide="presentation" class="w-5 h-5"></i>
+                                <span>Export PPT</span>
+                            </span>
+                        </button>
                     </div>
                 </div>
+                
+                <!-- Metric Cards -->
+                <div id="metricsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                    <!-- Metrics will be dynamically inserted -->
+                </div>
+                
+                <!-- Charts -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+                    <div class="chart-container glass-card">
+                        <h3 class="text-2xl font-bold mb-6">OS Lifecycle Status</h3>
+                        <canvas id="osChart"></canvas>
+                    </div>
+                    <div class="chart-container glass-card">
+                        <h3 class="text-2xl font-bold mb-6">7R Migration Strategy</h3>
+                        <canvas id="strategyChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-container glass-card mb-12">
+                    <h3 class="text-2xl font-bold mb-6">Cost Analysis</h3>
+                    <canvas id="costChart"></canvas>
+                </div>
+                
+                <!-- Risk Assessment -->
+                <div id="riskContainer" class="glass-card p-8">
+                    <h3 class="text-2xl font-bold mb-6">Priority Servers</h3>
+                    <div id="riskTable"></div>
+                </div>
             </div>
-        </div>
+        </section>
         
-        <button class="analyze-button" id="analyzeBtn" disabled>
-            Start AI Analysis
-        </button>
+        <!-- Assessments History -->
+        <section id="assessmentsView" class="hidden relative pt-32 pb-20 px-6">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-5xl font-black gradient-text mb-12">Assessment History</h2>
+                <div id="assessmentsList" class="space-y-4"></div>
+            </div>
+        </section>
         
-        <div class="results" id="results">
-            <div class="section-header">
-                <h2>Enterprise Migration Assessment Report</h2>
-                <p>Comprehensive AI-Powered Analysis for Cloud Transformation</p>
-            </div>
-            
-            <div class="executive-summary">
-                <h3>Executive Summary</h3>
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="metric-value warning">78</div>
-                        <div class="metric-label">Risk Score</div>
-                        <div class="metric-sublabel">Medium-High Priority</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value danger">23</div>
-                        <div class="metric-label">Critical Findings</div>
-                        <div class="metric-sublabel">Immediate Action Required</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value primary">$485K</div>
-                        <div class="metric-label">Total Investment</div>
-                        <div class="metric-sublabel">24-Month TCO</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value success">26</div>
-                        <div class="metric-label">Weeks Timeline</div>
-                        <div class="metric-sublabel">Discovery to Production</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value success">$2.1M</div>
-                        <div class="metric-label">3-Year Savings</div>
-                        <div class="metric-sublabel">Cost Optimization</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value warning">67</div>
-                        <div class="metric-label">Resources</div>
-                        <div class="metric-sublabel">To Be Migrated</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="risk-breakdown">
-                <h3>Risk Assessment Breakdown</h3>
-                <div class="risk-item">
-                    <div class="risk-category">
-                        <div class="risk-icon critical">C</div>
-                        <div class="risk-details">
-                            <h4>Security & Compliance</h4>
-                            <p>Encryption, IAM policies, data protection</p>
-                        </div>
-                    </div>
-                    <div class="risk-score">92/100</div>
-                </div>
-                <div class="risk-item">
-                    <div class="risk-category">
-                        <div class="risk-icon high">H</div>
-                        <div class="risk-details">
-                            <h4>Technical Complexity</h4>
-                            <p>Legacy dependencies, integration points</p>
-                        </div>
-                    </div>
-                    <div class="risk-score">85/100</div>
-                </div>
-                <div class="risk-item">
-                    <div class="risk-category">
-                        <div class="risk-icon medium">M</div>
-                        <div class="risk-details">
-                            <h4>Operational Impact</h4>
-                            <p>Downtime, performance, user experience</p>
-                        </div>
-                    </div>
-                    <div class="risk-score">68/100</div>
-                </div>
-                <div class="risk-item">
-                    <div class="risk-category">
-                        <div class="risk-icon low">L</div>
-                        <div class="risk-details">
-                            <h4>Cost Overrun</h4>
-                            <p>Budget variance, resource allocation</p>
-                        </div>
-                    </div>
-                    <div class="risk-score">42/100</div>
-                </div>
-            </div>
-            
-            <div class="findings-list">
-                <h3>Critical Security Findings</h3>
-                <div class="finding-item critical">
-                    <div class="finding-header">
-                        <div class="finding-title">Unencrypted Data at Rest</div>
-                        <span class="severity-badge critical">Critical</span>
-                    </div>
-                    <div class="finding-description">
-                        Database instances and S3 buckets are configured without server-side encryption. This exposes sensitive customer data to potential breaches and violates compliance requirements including GDPR, HIPAA, and PCI-DSS.
-                    </div>
-                    <div class="finding-impact">
-                        Impact: Data breach risk, compliance violations, potential fines up to $4.2M annually
-                    </div>
-                </div>
-                
-                <div class="finding-item critical">
-                    <div class="finding-header">
-                        <div class="finding-title">Overly Permissive IAM Policies</div>
-                        <span class="severity-badge critical">Critical</span>
-                    </div>
-                    <div class="finding-description">
-                        Multiple IAM roles have wildcard permissions allowing unrestricted access to all resources. This violates the principle of least privilege and creates significant security vulnerabilities for lateral movement in case of compromise.
-                    </div>
-                    <div class="finding-impact">
-                        Impact: Privilege escalation risk, unauthorized access, potential for complete infrastructure compromise
-                    </div>
-                </div>
-                
-                <div class="finding-item high">
-                    <div class="finding-header">
-                        <div class="finding-title">Missing MFA on Administrative Accounts</div>
-                        <span class="severity-badge high">High</span>
-                    </div>
-                    <div class="finding-description">
-                        Root and administrative user accounts lack multi-factor authentication enforcement. Single-factor authentication is insufficient for privileged access and increases risk of account takeover through phishing or credential theft.
-                    </div>
-                    <div class="finding-impact">
-                        Impact: Account compromise, unauthorized privileged access, potential ransomware deployment
-                    </div>
-                </div>
-                
-                <div class="finding-item high">
-                    <div class="finding-header">
-                        <div class="finding-title">Publicly Accessible Storage Buckets</div>
-                        <span class="severity-badge high">High</span>
-                    </div>
-                    <div class="finding-description">
-                        Storage buckets containing application backups and logs are configured with public read access. This exposes potentially sensitive operational data including API keys, database credentials, and customer information.
-                    </div>
-                    <div class="finding-impact">
-                        Impact: Data exposure, credential leakage, reconnaissance for targeted attacks
-                    </div>
-                </div>
-                
-                <div class="finding-item medium">
-                    <div class="finding-header">
-                        <div class="finding-title">Insufficient Logging and Monitoring</div>
-                        <span class="severity-badge medium">Medium</span>
-                    </div>
-                    <div class="finding-description">
-                        CloudTrail logging is not enabled for all regions and log retention is only 7 days. This limits forensic capability and incident response effectiveness, reducing visibility into security events.
-                    </div>
-                    <div class="finding-impact">
-                        Impact: Delayed threat detection, limited forensic evidence, compliance gaps
-                    </div>
-                </div>
-            </div>
-            
-            <div class="cost-breakdown">
-                <h3>Detailed Cost Analysis</h3>
-                <div class="cost-item">
-                    <div class="cost-label">Migration Services & Tooling</div>
-                    <div class="cost-value">$145,000</div>
-                </div>
-                <div class="cost-item">
-                    <div class="cost-label">Professional Services & Consulting</div>
-                    <div class="cost-value">$98,000</div>
-                </div>
-                <div class="cost-item">
-                    <div class="cost-label">Infrastructure Setup & Configuration</div>
-                    <div class="cost-value">$67,000</div>
-                </div>
-                <div class="cost-item">
-                    <div class="cost-label">Security Implementation & Hardening</div>
-                    <div class="cost-value">$52,000</div>
-                </div>
-                <div class="cost-item">
-                    <div class="cost-label">Testing & Validation</div>
-                    <div class="cost-value">$43,000</div>
-                </div>
-                <div class="cost-item">
-                    <div class="cost-label">Training & Knowledge Transfer</div>
-                    <div class="cost-value">$38,000</div>
-                </div>
-                <div class="cost-item">
-                    <div class="cost-label">Contingency Reserve (15%)</div>
-                    <div class="cost-value">$42,000</div>
-                </div>
-                <div class="cost-item">
-                    <div class="cost-label">Total Migration Investment</div>
-                    <div class="cost-value">$485,000</div>
-                </div>
-            </div>
-            
-            <div class="timeline">
-                <h3>Migration Timeline & Phases</h3>
-                <div class="timeline-item">
-                    <div class="timeline-marker">1</div>
-                    <div class="timeline-content">
-                        <h4>Discovery & Assessment</h4>
-                        <p>Complete infrastructure inventory, dependency mapping, application profiling, and detailed technical assessment. Identify all migration waves and establish baseline metrics.</p>
-                        <span class="timeline-duration">4 weeks</span>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-marker">2</div>
-                    <div class="timeline-content">
-                        <h4>Planning & Design</h4>
-                        <p>Architecture design, security framework implementation, compliance validation, cost optimization strategies, and detailed migration runbooks for each wave.</p>
-                        <span class="timeline-duration">5 weeks</span>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-marker">3</div>
-                    <div class="timeline-content">
-                        <h4>Proof of Concept</h4>
-                        <p>Pilot migration of non-critical workloads, performance validation, security testing, disaster recovery drills, and stakeholder approval process.</p>
-                        <span class="timeline-duration">3 weeks</span>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-marker">4</div>
-                    <div class="timeline-content">
-                        <h4>Migration Execution</h4>
-                        <p>Phased migration of production workloads in 3 waves, continuous monitoring, automated testing, rollback procedures, and 24/7 support coverage.</p>
-                        <span class="timeline-duration">10 weeks</span>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-marker">5</div>
-                    <div class="timeline-content">
-                        <h4>Optimization & Stabilization</h4>
-                        <p>Performance tuning, cost optimization, security hardening, operational runbook validation, team training, and hypercare support period.</p>
-                        <span class="timeline-duration">4 weeks</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="recommendations">
-                <h3>Strategic Recommendations</h3>
-                <div class="recommendation-item">
-                    <h4>Implement Zero Trust Security Architecture</h4>
-                    <p>Deploy comprehensive identity and access management with multi-factor authentication, implement encryption for all data at rest and in transit, enable detailed audit logging, and establish automated compliance monitoring. This addresses 78% of identified critical security findings.</p>
-                    <div class="recommendation-meta">
-                        <div class="meta-item"><strong>Impact:</strong> High</div>
-                        <div class="meta-item"><strong>Effort:</strong> 6 weeks</div>
-                        <div class="meta-item"><strong>Cost:</strong> $85K</div>
-                    </div>
-                </div>
-                
-                <div class="recommendation-item">
-                    <h4>Adopt Infrastructure as Code with GitOps</h4>
-                    <p>Migrate all infrastructure to Terraform with version control, implement automated testing and validation pipelines, establish environment parity, and enable rollback capabilities. This ensures consistency and reduces deployment risks by 65%.</p>
-                    <div class="recommendation-meta">
-                        <div class="meta-item"><strong>Impact:</strong> High</div>
-                        <div class="meta-item"><strong>Effort:</strong> 4 weeks</div>
-                        <div class="meta-item"><strong>Cost:</strong> $42K</div>
-                    </div>
-                </div>
-                
-                <div class="recommendation-item">
-                    <h4>Implement Comprehensive Observability</h4>
-                    <p>Deploy centralized logging, distributed tracing, application performance monitoring, and real-time alerting. Establish SLOs and automated incident response workflows to reduce MTTR by 75%.</p>
-                    <div class="recommendation-meta">
-                        <div class="meta-item"><strong>Impact:</strong> Medium</div>
-                        <div class="meta-item"><strong>Effort:</strong> 3 weeks</div>
-                        <div class="meta-item"><strong>Cost:</strong> $31K</div>
-                    </div>
-                </div>
-                
-                <div class="recommendation-item">
-                    <h4>Establish Cloud Center of Excellence</h4>
-                    <p>Create internal team for cloud governance, best practices documentation, cost optimization programs, and continuous improvement initiatives. This ensures long-term success and realizes maximum ROI from cloud investment.</p>
-                    <div class="recommendation-meta">
-                        <div class="meta-item"><strong>Impact:</strong> High</div>
-                        <div class="meta-item"><strong>Effort:</strong> Ongoing</div>
-                        <div class="meta-item"><strong>Cost:</strong> $120K annually</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="roi-section">
-                <h3>Expected Return on Investment</h3>
-                <div class="roi-grid">
-                    <div class="roi-item">
-                        <div class="roi-value">$2.1M</div>
-                        <div class="roi-label">3-Year Cost Savings</div>
-                    </div>
-                    <div class="roi-item">
-                        <div class="roi-value">8.6x</div>
-                        <div class="roi-label">ROI Multiplier</div>
-                    </div>
-                    <div class="roi-item">
-                        <div class="roi-value">18 mo</div>
-                        <div class="roi-label">Payback Period</div>
-                    </div>
-                    <div class="roi-item">
-                        <div class="roi-value">45%</div>
-                        <div class="roi-label">Infrastructure Cost Reduction</div>
-                    </div>
-                    <div class="roi-item">
-                        <div class="roi-value">99.95%</div>
-                        <div class="roi-label">Target Availability</div>
-                    </div>
-                    <div class="roi-item">
-                        <div class="roi-value">60%</div>
-                        <div class="roi-label">Faster Time to Market</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="next-steps">
-                <h3>Next Steps to Get Started</h3>
-                <div class="step-item">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h4>Executive Briefing</h4>
-                        <p>Schedule a 60-minute session with your leadership team to review this assessment, discuss business objectives, and align on success criteria and timeline expectations.</p>
-                    </div>
-                </div>
-                <div class="step-item">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h4>Detailed Discovery Workshop</h4>
-                        <p>Conduct comprehensive 2-day technical workshop with your engineering team to validate findings, identify additional dependencies, and refine migration approach based on your specific requirements.</p>
-                    </div>
-                </div>
-                <div class="step-item">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h4>Proof of Concept Execution</h4>
-                        <p>Execute focused 3-week POC on selected non-critical workload to validate technical approach, demonstrate value, and build confidence with your team before full-scale migration.</p>
-                    </div>
-                </div>
-                <div class="step-item">
-                    <div class="step-number">4</div>
-                    <div class="step-content">
-                        <h4>Kickoff & Begin Migration</h4>
-                        <p>Finalize statement of work, assemble dedicated migration team, establish governance and communication cadence, and begin Phase 1 discovery with your full production environment.</p>
-                    </div>
-                </div>
-                
-                <div class="cta-buttons">
-                    <button class="cta-button primary" onclick="alert('Thank you for your interest! This demo shows the comprehensive analysis capabilities. Contact us to schedule your real assessment.')">
-                        Schedule Executive Briefing
-                    </button>
-                    <button class="cta-button secondary" onclick="window.print()">
-                        Download Full Report
-                    </button>
-                </div>
-            </div>
-            
-            <div class="github-link">
-                <a href="https://github.com/bharathk2498/migrationgpt" target="_blank">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                    </svg>
-                    Powered by MigrationGPT
-                </a>
-            </div>
+    </div>
+    
+    <!-- Floating Action Button -->
+    <div class="fab" onclick="scrollToTop()">
+        <i data-lucide="arrow-up" class="w-6 h-6"></i>
+    </div>
+    
+    <!-- Toast Container -->
+    <div id="toastContainer"></div>
+    
+    <!-- Loading Indicator -->
+    <div id="loadingIndicator" class="hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-[10000]">
+        <div class="glass-card p-12 text-center">
+            <div class="loading mx-auto mb-4" style="width: 60px; height: 60px; border-width: 6px;"></div>
+            <p class="text-xl font-semibold">Analyzing infrastructure...</p>
         </div>
     </div>
     
+    <script src="app.js"></script>
+    <script src="charts.js"></script>
+    <script src="animations.js"></script>
+    
     <script>
-        const uploadZone = document.getElementById('uploadZone');
-        const fileInput = document.getElementById('fileInput');
-        const filePreview = document.getElementById('filePreview');
-        const fileName = document.getElementById('fileName');
-        const fileSize = document.getElementById('fileSize');
-        const analyzeBtn = document.getElementById('analyzeBtn');
-        const results = document.getElementById('results');
+        // Initialize Lucide icons
+        lucide.createIcons();
         
-        let selectedFile = null;
-        
-        uploadZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadZone.classList.add('drag-over');
+        // Initialize particles
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#0ea5e9' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.5, random: false },
+                size: { value: 3, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#0ea5e9',
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: 'none',
+                    random: false,
+                    straight: false,
+                    out_mode: 'out',
+                    bounce: false
+                }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: { enable: true, mode: 'repulse' },
+                    onclick: { enable: true, mode: 'push' },
+                    resize: true
+                }
+            },
+            retina_detect: true
         });
         
-        uploadZone.addEventListener('dragleave', () => {
-            uploadZone.classList.remove('drag-over');
-        });
-        
-        uploadZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadZone.classList.remove('drag-over');
-            const file = e.dataTransfer.files[0];
-            handleFile(file);
-        });
-        
-        fileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            handleFile(file);
-        });
-        
-        function handleFile(file) {
-            if (!file) return;
-            
-            selectedFile = file;
-            fileName.textContent = file.name;
-            fileSize.textContent = (file.size / 1024).toFixed(1) + ' KB';
-            filePreview.classList.add('active');
-            analyzeBtn.disabled = false;
+        // Scroll to top
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         
-        analyzeBtn.addEventListener('click', () => {
-            analyzeBtn.textContent = 'Analyzing...';
-            analyzeBtn.disabled = true;
-            
-            setTimeout(() => {
-                results.classList.add('active');
-                results.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                analyzeBtn.textContent = 'Analysis Complete';
-                
-                setTimeout(() => {
-                    analyzeBtn.textContent = 'Start AI Analysis';
-                    analyzeBtn.disabled = false;
-                }, 2000);
-            }, 1500);
-        });
+        // View management
+        function showView(view) {
+            const views = ['homeView', 'uploadView', 'dashboardView', 'assessmentsView'];
+            views.forEach(v => {
+                document.getElementById(v).classList.add('hidden');
+            });
+            document.getElementById(view + 'View').classList.remove('hidden');
+            lucide.createIcons();
+        }
     </script>
 </body>
 </html>
